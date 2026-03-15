@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { getProductById as getDbProduct } from '@/lib/data';
 import { getProductById as getStaticProduct } from '@/data/products';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
+import type { Product } from '@/lib/types'; // ✅ import Product type
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -16,14 +17,19 @@ export default async function ProductDetailPage({ params }: Props) {
   if (!product) return notFound();
 
   const isDb = !!dbProduct;
-  const imageUrl = isDb && product.images?.length
-    ? product.images[0].url
+
+  // ✅ Safe type assertion for images
+  const typedProduct = product as Product & { images?: { url: string; sort_order: number }[] };
+
+  const imageUrl = isDb && typedProduct.images?.length
+    ? typedProduct.images[0].url
     : 'image' in product
       ? (product as { image: string }).image
       : '/eiliyah-logo.png';
-  const benefits = isDb ? (product.benefits ?? []) : (product as { benefits: string[] }).benefits ?? [];
-  const howToUse = isDb ? (product.how_to_use ?? []) : (product as { howToUse: string[] }).howToUse ?? [];
-  const ingredients = isDb ? (product.ingredients ?? []) : (product as { ingredients: string[] }).ingredients ?? [];
+
+  const benefits = isDb ? (typedProduct.benefits ?? []) : (product as { benefits: string[] }).benefits ?? [];
+  const howToUse = isDb ? (typedProduct.how_to_use ?? []) : (product as { howToUse: string[] }).howToUse ?? [];
+  const ingredients = isDb ? (typedProduct.ingredients ?? []) : (product as { ingredients: string[] }).ingredients ?? [];
   const faqs = !isDb && 'faqs' in product ? (product as { faqs: { question: string; answer: string }[] }).faqs : [];
 
   return (
@@ -44,18 +50,10 @@ export default async function ProductDetailPage({ params }: Props) {
       </div>
 
       <div>
-        <p className="text-xs uppercase tracking-[0.2em] text-mumsy-purple/80">
-          INTIMATE CARE
-        </p>
-        <h1 className="mt-2 font-heading text-3xl text-mumsy-dark">
-          {product.name}
-        </h1>
-        <p className="mt-3 text-sm text-mumsy-dark/80">
-          {product.description ?? ''}
-        </p>
-        <p className="mt-4 text-2xl font-semibold text-mumsy-purple">
-          Rs {product.price.toFixed(0)}
-        </p>
+        <p className="text-xs uppercase tracking-[0.2em] text-mumsy-purple/80">INTIMATE CARE</p>
+        <h1 className="mt-2 font-heading text-3xl text-mumsy-dark">{product.name}</h1>
+        <p className="mt-3 text-sm text-mumsy-dark/80">{product.description ?? ''}</p>
+        <p className="mt-4 text-2xl font-semibold text-mumsy-purple">Rs {product.price.toFixed(0)}</p>
         <div className="mt-4">
           <AddToCartButton product={{ id: product.id, name: product.name, price: product.price }} />
         </div>
@@ -64,27 +62,21 @@ export default async function ProductDetailPage({ params }: Props) {
           {benefits.length > 0 && (
             <DetailSection title="Benefits">
               <ul className="list-disc list-inside text-sm text-mumsy-dark/80 space-y-1">
-                {benefits.map((b) => (
-                  <li key={b}>{b}</li>
-                ))}
+                {benefits.map((b) => <li key={b}>{b}</li>)}
               </ul>
             </DetailSection>
           )}
           {howToUse.length > 0 && (
             <DetailSection title="How to use">
               <ol className="list-decimal list-inside text-sm text-mumsy-dark/80 space-y-1">
-                {howToUse.map((step) => (
-                  <li key={step}>{step}</li>
-                ))}
+                {howToUse.map((step) => <li key={step}>{step}</li>)}
               </ol>
             </DetailSection>
           )}
           {ingredients.length > 0 && (
             <DetailSection title="Key ingredients">
               <ul className="list-disc list-inside text-sm text-mumsy-dark/80 space-y-1">
-                {ingredients.map((i) => (
-                  <li key={i}>{i}</li>
-                ))}
+                {ingredients.map((i) => <li key={i}>{i}</li>)}
               </ul>
             </DetailSection>
           )}
@@ -120,13 +112,7 @@ export default async function ProductDetailPage({ params }: Props) {
   );
 }
 
-function DetailSection({
-  title,
-  children
-}: {
-  title: string;
-  children: ReactNode;
-}) {
+function DetailSection({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section>
       <h2 className="font-heading text-xl text-mumsy-dark">{title}</h2>

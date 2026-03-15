@@ -10,6 +10,7 @@ import {
   deleteProduct,
   addProductImage,
 } from '@/lib/data';
+import { uploadProductImage } from '@/lib/storage';
 import type { Range, Product } from '@/lib/types';
 
 export default function AdminProductsPage() {

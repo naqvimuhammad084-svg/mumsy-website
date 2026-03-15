@@ -65,7 +65,7 @@ export type Range = RangeRow & {
 };
 
 export type Product = ProductRow & {
-  images: { url: string; sort_order: number }[];
+  images?: { url: string; sort_order: number }[]; // ✅ made optional to fix TS errors
 };
 
 export type Bundle = BundleRow & {

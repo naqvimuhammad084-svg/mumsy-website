@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getRangeBySlug, getProductsByRangeId, getBundlesWithProductsByRangeId } from '@/lib/data';
 import { ProductCard } from '@/components/ProductCard';
 import { BundleCard } from '@/components/BundleCard';
+import type { Product } from '@/lib/types';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -38,10 +39,28 @@ export default async function RangePage({ params }: Props) {
   }
 
   const rangeId = range?.id ?? '';
-  const [products, bundlesWithProducts] = await Promise.all([
+  const [productsRaw, bundlesRaw] = await Promise.all([
     rangeId ? getProductsByRangeId(rangeId) : Promise.resolve([]),
     rangeId ? getBundlesWithProductsByRangeId(rangeId) : Promise.resolve([]),
   ]);
+
+  // ✅ Map products to always include images
+  const products = productsRaw.map((p) => ({
+    ...p,
+    images: p.images?.map((img) => ({ url: img.url })) ?? [],
+  }));
+
+  // ✅ Map bundles to ensure each included product has images
+  const bundlesWithProducts = bundlesRaw.map((b) => ({
+    ...b,
+    includedProducts: b.includedProducts.map(({ product, quantity }) => ({
+      product: {
+        ...product,
+        images: product.images?.map((img) => ({ url: img.url })) ?? [],
+      },
+      quantity,
+    })),
+  }));
 
   return (
     <RangeLayout
@@ -130,7 +149,7 @@ function RangeLayout({
                     name: product.name,
                     price: product.price,
                     description: product.description,
-                    imageUrl: product.images?.[0]?.url?.trim() || null,
+                    images: product.images, // ✅ now safe
                     quantity,
                   })),
                 }}
