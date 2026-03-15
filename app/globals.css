@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --mumsy-purple: #5b2c83;
+  --mumsy-lavender: #d6c4f3;
+  --mumsy-soft: #f7f3ff;
+  --mumsy-dark: #2b123f;
+}
+
+body {
+  @apply bg-mumsy-soft text-mumsy-dark font-body antialiased;
+}
+
+.container-page {
+  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
