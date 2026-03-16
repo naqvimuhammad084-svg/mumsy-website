@@ -30,20 +30,21 @@ export function ProductCard({ product }: { product: ProductCardData }) {
   const benefit = getShortBenefit(product);
 
   return (
-    <article className="bg-white rounded-3xl border border-mumsy-lavender/40 shadow-soft/40 p-4 flex flex-col">
+    <article className="group bg-white/80 rounded-3xl border border-white/40 shadow-[0_20px_60px_rgba(0,0,0,0.06)] overflow-hidden flex flex-col backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_30px_80px_rgba(0,0,0,0.12)]">
       <Link
         href={`/product/${product.id}`}
-        className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-mumsy-soft"
+        className="relative aspect-[4/5] w-full overflow-hidden bg-gradient-to-b from-mumsy-soft/80 to-white"
       >
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_rgba(147,115,255,0.10),_transparent_55%)]" />
         <Image
           src={imageUrl}
           alt={product.name}
           fill
-          className="object-contain p-4 hover:scale-105 transition-transform"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
           unoptimized={imageUrl.startsWith('http')}
         />
       </Link>
-      <div className="mt-4 flex-1 flex flex-col">
+      <div className="p-5 flex-1 flex flex-col">
         <h3 className="font-heading text-lg text-mumsy-dark">{product.name}</h3>
         {benefit && (
           <p className="mt-1 text-sm text-mumsy-dark/70">{benefit}</p>

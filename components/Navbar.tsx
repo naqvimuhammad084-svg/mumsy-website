@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { CartSummary } from '@/components/cart/CartSummary';
@@ -16,17 +16,33 @@ const navLinks = [
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 8);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <header className="fixed top-0 inset-x-0 z-40 bg-white/90 backdrop-blur-md border-b border-mumsy-lavender/40">
-      <div className="container-page flex items-center justify-between py-3 gap-4">
+    <header
+      className={`fixed top-0 inset-x-0 z-40 border-b border-white/40 backdrop-blur-xl transition-all duration-300 ${
+        scrolled
+          ? 'bg-white/80 shadow-[0_18px_45px_rgba(48,10,80,0.14)] py-1.5'
+          : 'bg-white/60 shadow-[0_14px_35px_rgba(48,10,80,0.08)] py-3'
+      }`}
+    >
+      <div className="container-page flex items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <div className="relative h-9 w-9 rounded-2xl bg-mumsy-purple overflow-hidden">
+          <div className="relative h-9 w-9 rounded-2xl bg-mumsy-purple/95 overflow-hidden shadow-[0_10px_30px_rgba(91,44,131,0.35)]">
             <Image
               src="/eiliyah-logo.png"
               alt="EILIYAH"
               fill
-              className="object-contain p-1"
+              className="object-cover"
             />
           </div>
           <div className="leading-tight">
@@ -44,7 +60,7 @@ export function Navbar() {
             <Link
               key={href}
               href={href}
-              className="hover:text-mumsy-purple transition-colors"
+              className="relative pb-0.5 hover:text-mumsy-purple transition-colors after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:w-0 after:bg-mumsy-purple after:transition-all after:duration-300 hover:after:w-full"
             >
               {label}
             </Link>

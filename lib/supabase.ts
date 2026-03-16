@@ -14,6 +14,7 @@ function createSupabaseClient(): SupabaseClient {
     )
   }
 
+  // Use Supabase defaults so sessions persist correctly across navigations/reloads.
   return createClient(supabaseUrl, supabaseAnonKey)
 }
 

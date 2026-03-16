@@ -17,6 +17,23 @@ body {
   @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
 }
 
+/* Premium global background feel */
+body {
+  @apply bg-gradient-to-b from-white via-mumsy-soft to-white text-mumsy-dark font-body antialiased;
+}
+
+@keyframes float-soft {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-18px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes ring-pulse-soft {
+  0% { transform: scale(1); opacity: 0.8; }
+  70% { transform: scale(1.15); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }

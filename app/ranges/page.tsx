@@ -34,7 +34,7 @@ export default async function RangesPage() {
                 src={range.logo_url?.trim() ? range.logo_url : '/eiliyah-logo.png'}
                 alt={range.name}
                 fill
-                className="object-contain p-4 group-hover:scale-105 transition-transform"
+                className="object-cover group-hover:scale-105 transition-transform"
                 unoptimized={(range.logo_url?.trim() ?? '').startsWith('http')}
               />
             </div>

@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { getProductById as getDbProduct } from '@/lib/data';
 import { getProductById as getStaticProduct } from '@/data/products';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
+import { ProductGallery } from '@/components/ProductGallery';
 import type { Product } from '@/lib/types'; // ✅ import Product type
 
 type Props = { params: Promise<{ id: string }> };
@@ -21,11 +22,11 @@ export default async function ProductDetailPage({ params }: Props) {
   // ✅ Safe type assertion for images
   const typedProduct = product as Product & { images?: { url: string; sort_order: number }[] };
 
-  const imageUrl = isDb && typedProduct.images?.length
-    ? typedProduct.images[0].url
+  const galleryImages = isDb && typedProduct.images?.length
+    ? typedProduct.images
     : 'image' in product
-      ? (product as { image: string }).image
-      : '/eiliyah-logo.png';
+      ? [{ url: (product as { image: string }).image }]
+      : [{ url: '/eiliyah-logo.png' }];
 
   const benefits = isDb ? (typedProduct.benefits ?? []) : (product as { benefits: string[] }).benefits ?? [];
   const howToUse = isDb ? (typedProduct.how_to_use ?? []) : (product as { howToUse: string[] }).howToUse ?? [];
@@ -34,20 +35,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
   return (
     <div className="container-page py-10 grid md:grid-cols-[1.1fr,1fr] gap-10">
-      <div className="relative">
-        <div className="absolute -inset-6 bg-mumsy-lavender/30 rounded-3xl blur-xl" />
-        <div className="relative bg-white rounded-3xl border border-mumsy-lavender/40 shadow-soft overflow-hidden">
-          <div className="aspect-[4/5] relative">
-            <Image
-              src={imageUrl}
-              alt={product.name}
-              fill
-              className="object-contain p-6"
-              unoptimized={imageUrl.startsWith('http')}
-            />
-          </div>
-        </div>
-      </div>
+      <ProductGallery images={galleryImages} alt={product.name} />
 
       <div>
         <p className="text-xs uppercase tracking-[0.2em] text-mumsy-purple/80">INTIMATE CARE</p>
@@ -62,21 +50,21 @@ export default async function ProductDetailPage({ params }: Props) {
           {benefits.length > 0 && (
             <DetailSection title="Benefits">
               <ul className="list-disc list-inside text-sm text-mumsy-dark/80 space-y-1">
-                {benefits.map((b) => <li key={b}>{b}</li>)}
+                {benefits.map((b, i) => <li key={`${b}-${i}`}>{b}</li>)}
               </ul>
             </DetailSection>
           )}
           {howToUse.length > 0 && (
             <DetailSection title="How to use">
               <ol className="list-decimal list-inside text-sm text-mumsy-dark/80 space-y-1">
-                {howToUse.map((step) => <li key={step}>{step}</li>)}
+                {howToUse.map((step, i) => <li key={`${step}-${i}`}>{step}</li>)}
               </ol>
             </DetailSection>
           )}
           {ingredients.length > 0 && (
             <DetailSection title="Key ingredients">
               <ul className="list-disc list-inside text-sm text-mumsy-dark/80 space-y-1">
-                {ingredients.map((i) => <li key={i}>{i}</li>)}
+                {ingredients.map((ing, i) => <li key={`${ing}-${i}`}>{ing}</li>)}
               </ul>
             </DetailSection>
           )}

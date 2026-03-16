@@ -5,9 +5,9 @@ import { ProductCard } from '@/components/ProductCard';
 import { BundleCard } from '@/components/BundleCard';
 import { TestimonialSection } from '@/components/TestimonialSection';
 import { EducationSection } from '@/components/EducationSection';
-import { defaultRanges } from '@/data/ranges';
 import { products as staticProducts } from '@/data/products';
 import { bundles as staticBundles } from '@/data/bundles';
+import { getRanges } from '@/lib/data';
 import type { ProductCardData } from '@/components/ProductCard';
 import type { BundleCardData } from '@/components/BundleCard';
 
@@ -16,10 +16,9 @@ export const metadata = {
   description: 'Gentle, dermatologist-inspired intimate-care essentials.'
 };
 
-export const dynamic = 'force-static';
-
-export default function HomePage() {
-  const ranges = defaultRanges;
+export default async function HomePage() {
+  // Load all ranges from Supabase via existing data helper.
+  const ranges = await getRanges();
   const featuredProducts: ProductCardData[] = staticProducts.slice(0, 4).map((p) => ({
     id: p.id,
     name: p.name,
@@ -58,7 +57,7 @@ export default function HomePage() {
                   src={range.logo_url || '/vintima-logo.png'}
                   alt={range.name}
                   fill
-                  className="object-contain p-4 group-hover:scale-105 transition-transform"
+                  className="object-cover group-hover:scale-105 transition-transform"
                   unoptimized={(range.logo_url || '').startsWith('http')}
                 />
               </div>

@@ -33,13 +33,13 @@ export function BundleCard({ bundle }: { bundle: BundleCardData }) {
       : bundle.products ?? [];
 
   return (
-    <article className="bg-white rounded-3xl border border-mumsy-lavender/40 shadow-soft/40 overflow-hidden flex flex-col">
+    <article className="group bg-white/80 rounded-3xl border border-white/40 shadow-[0_20px_60px_rgba(0,0,0,0.06)] overflow-hidden flex flex-col backdrop-blur-xl transition-transform duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_30px_80px_rgba(0,0,0,0.12)]">
       <div className="p-5 flex flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
           <div>
             <h3 className="font-heading text-lg text-mumsy-dark">{bundle.name}</h3>
             {savings && (
-              <p className="mt-1 text-xs uppercase tracking-[0.18em] text-mumsy-purple/80">
+              <p className="mt-1 inline-flex items-center gap-1 rounded-full bg-mumsy-purple/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-mumsy-purple/80 border border-mumsy-purple/30 shadow-[0_0_18px_rgba(91,44,131,0.35)]">
                 {savings}
               </p>
             )}
@@ -60,14 +60,14 @@ export function BundleCard({ bundle }: { bundle: BundleCardData }) {
                 <Link
                   key={p.id}
                   href={`/product/${p.id}`}
-                  className="flex flex-col rounded-xl border border-mumsy-lavender/40 overflow-hidden bg-mumsy-soft/40 hover:border-mumsy-purple/50 transition"
+                  className="flex flex-col rounded-xl border border-mumsy-lavender/40 overflow-hidden bg-mumsy-soft/40 hover:border-mumsy-purple/50 transition-transform duration-300 hover:-translate-y-1"
                 >
                   <div className="relative aspect-square w-full">
                     <Image
                       src={p.imageUrl?.trim() || '/eiliyah-logo.png'}
                       alt={p.name}
                       fill
-                      className="object-contain p-2"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
                       unoptimized={(p.imageUrl?.trim() ?? '').startsWith('http')}
                     />
                   </div>

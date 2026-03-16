@@ -17,8 +17,10 @@ export function EducationSection() {
   return (
     <section
       id="education"
-      className="container-page mt-16 grid md:grid-cols-[1.1fr,1fr] gap-8 items-start"
+      className="relative mt-16"
     >
+      <div className="pointer-events-none absolute -top-24 right-0 h-56 w-56 rounded-full bg-mumsy-lavender/25 blur-[110px] animate-[float-soft_24s_ease-in-out_infinite]" />
+      <div className="container-page grid md:grid-cols-[1.1fr,1fr] gap-8 items-start">
       <div>
         <p className="text-xs uppercase tracking-[0.2em] text-mumsy-purple/80">
           INTIMATE CARE EDUCATION
@@ -37,7 +39,7 @@ export function EducationSection() {
         {tips.map((tip) => (
           <article
             key={tip.title}
-            className="rounded-2xl bg-white border border-mumsy-lavender/40 p-4"
+            className="rounded-2xl bg-white/85 border border-white/60 p-4 shadow-[0_14px_40px_rgba(0,0,0,0.06)] backdrop-blur-xl transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_22px_60px_rgba(0,0,0,0.12)]"
           >
             <h3 className="font-semibold text-sm text-mumsy-dark">
               {tip.title}
@@ -45,6 +47,7 @@ export function EducationSection() {
             <p className="mt-1 text-xs text-mumsy-dark/75">{tip.body}</p>
           </article>
         ))}
+      </div>
       </div>
     </section>
   );

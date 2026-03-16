@@ -18,8 +18,10 @@ const testimonials = [
 
 export function TestimonialSection() {
   return (
-    <section className="container-page mt-10">
-      <div className="rounded-3xl bg-gradient-to-r from-mumsy-purple to-mumsy-dark text-white px-6 py-10 sm:px-10 sm:py-12">
+    <section className="relative mt-16">
+      <div className="pointer-events-none absolute inset-x-0 -top-24 h-40 bg-gradient-to-r from-mumsy-purple/10 via-transparent to-mumsy-purple/10 blur-3xl" />
+      <div className="container-page">
+      <div className="rounded-3xl bg-gradient-to-r from-mumsy-purple to-mumsy-dark text-white px-6 py-10 sm:px-10 sm:py-12 shadow-[0_24px_80px_rgba(0,0,0,0.25)]">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div className="max-w-md">
             <p className="text-xs uppercase tracking-[0.2em] text-mumsy-soft/80">
@@ -37,7 +39,7 @@ export function TestimonialSection() {
             {testimonials.map((t) => (
               <article
                 key={t.name}
-                className="rounded-2xl bg-white/10 backdrop-blur p-4 text-sm"
+                className="rounded-2xl bg-white/12 backdrop-blur-lg p-4 text-sm transition-transform duration-300 hover:-translate-y-1.5 hover:bg-white/18"
               >
                 <p className="text-mumsy-soft/95">{t.text}</p>
                 <p className="mt-3 font-semibold">{t.name}</p>
@@ -46,6 +48,7 @@ export function TestimonialSection() {
             ))}
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

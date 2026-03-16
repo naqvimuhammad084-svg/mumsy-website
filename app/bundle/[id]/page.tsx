@@ -8,6 +8,8 @@ import { products as staticProducts } from '@/data/products';
 
 type Props = { params: Promise<{ id: string }> };
 
+export const dynamic = 'force-dynamic';
+
 export default async function BundleDetailPage({ params }: Props) {
   const { id } = await params;
   const dbBundle = await getBundleWithProducts(id);
@@ -65,7 +67,7 @@ export default async function BundleDetailPage({ params }: Props) {
                     src={product.images?.[0]?.url?.trim() || '/eiliyah-logo.png'}
                     alt={product.name}
                     fill
-                    className="object-contain p-2"
+                    className="object-cover"
                     unoptimized={(product.images?.[0]?.url?.trim() ?? '').startsWith('http')}
                   />
                 </div>

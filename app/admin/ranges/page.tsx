@@ -181,7 +181,7 @@ export default function AdminRangesPage() {
                     <td className="p-3">
                       {r.logo_url ? (
                         <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-mumsy-soft">
-                          <Image src={r.logo_url} alt="" fill className="object-contain" unoptimized />
+                          <Image src={r.logo_url} alt="" fill className="object-cover" unoptimized />
                         </div>
                       ) : (
                         <span className="text-mumsy-dark/50">—</span>

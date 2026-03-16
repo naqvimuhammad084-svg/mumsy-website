@@ -224,7 +224,7 @@ export default function AdminProductsPage() {
                     <td className="p-3">
                       {p.images?.length ? (
                         <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-mumsy-soft">
-                          <Image src={p.images[0].url} alt={p.name} fill className="object-contain" unoptimized />
+                          <Image src={p.images[0].url} alt={p.name} fill className="object-cover" unoptimized />
                         </div>
                       ) : <span className="text-mumsy-dark/50">—</span>}
                     </td>

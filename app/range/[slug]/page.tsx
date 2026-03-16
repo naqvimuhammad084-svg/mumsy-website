@@ -91,7 +91,7 @@ function RangeLayout({
               src={logoUrl}
               alt={range.name}
               fill
-              className="object-contain p-6"
+              className="object-cover"
               priority
               unoptimized={logoUrl.startsWith('http')}
             />
