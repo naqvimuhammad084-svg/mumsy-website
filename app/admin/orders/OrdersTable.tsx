@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 type Order = {
@@ -11,12 +10,34 @@ type Order = {
   order_items: unknown;
   total_price: number;
   payment_method: string;
+  status?: string;
   created_at: string;
 };
 
-export function OrdersTable({ orders }: { orders: Order[] }) {
-  const router = useRouter();
+export function OrdersTable({
+  orders,
+  onChanged,
+}: {
+  orders: Order[];
+  onChanged: () => Promise<void>;
+}) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
+
+  const handleConfirm = async (id: string) => {
+    setConfirmingId(id);
+    try {
+      const res = await fetch(`/api/admin/orders/${id}`, { method: 'PATCH' });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        alert(data.error || 'Confirm failed');
+        return;
+      }
+      await onChanged();
+    } finally {
+      setConfirmingId(null);
+    }
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this order? This cannot be undone.')) return;
@@ -28,7 +49,7 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
         alert(data.error || 'Delete failed');
         return;
       }
-      router.refresh();
+      await onChanged();
     } finally {
       setDeletingId(null);
     }
@@ -47,8 +68,10 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
             <th className="text-left p-3 font-semibold text-mumsy-dark">Customer</th>
             <th className="text-left p-3 font-semibold text-mumsy-dark">Phone</th>
             <th className="text-left p-3 font-semibold text-mumsy-dark">Address</th>
+            <th className="text-left p-3 font-semibold text-mumsy-dark">Items</th>
             <th className="text-left p-3 font-semibold text-mumsy-dark">Total</th>
             <th className="text-left p-3 font-semibold text-mumsy-dark">Payment</th>
+            <th className="text-left p-3 font-semibold text-mumsy-dark">Status</th>
             <th className="text-left p-3 font-semibold text-mumsy-dark">Actions</th>
           </tr>
         </thead>
@@ -63,11 +86,34 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
               <td className="p-3 max-w-[200px] truncate" title={o.address}>
                 {o.address}
               </td>
+              <td className="p-3 max-w-[260px]">
+                <div className="line-clamp-3 text-mumsy-dark/80">
+                  {Array.isArray(o.order_items)
+                    ? o.order_items
+                        .map((it) => {
+                          if (!it || typeof it !== 'object') return '';
+                          const row = it as Record<string, unknown>;
+                          return `${String(row.name ?? 'Item')} x${String(row.quantity ?? 1)}`;
+                        })
+                        .filter(Boolean)
+                        .join(', ')
+                    : '—'}
+                </div>
+              </td>
               <td className="p-3 font-semibold text-mumsy-purple">
                 Rs {Number(o.total_price).toFixed(0)}
               </td>
               <td className="p-3">{o.payment_method}</td>
+              <td className="p-3 capitalize">{o.status ?? 'pending'}</td>
               <td className="p-3">
+                <button
+                  type="button"
+                  onClick={() => handleConfirm(o.id)}
+                  disabled={(o.status ?? 'pending').toLowerCase() === 'confirmed' || confirmingId === o.id}
+                  className="mr-3 text-green-700 font-medium hover:underline disabled:opacity-50"
+                >
+                  {confirmingId === o.id ? 'Confirming…' : (o.status ?? 'pending').toLowerCase() === 'confirmed' ? 'Confirmed' : 'Confirm'}
+                </button>
                 <button
                   type="button"
                   onClick={() => handleDelete(o.id)}

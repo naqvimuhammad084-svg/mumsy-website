@@ -12,7 +12,7 @@ export const bundles: Bundle[] = [
     id: 'daily-comfort-bundle',
     name: 'Daily Comfort Bundle',
     description:
-      'Your everyday intimate-care ritual for feeling fresh, comfortable, and confident.',
+      'Your everyday personal-care ritual for feeling fresh, comfortable, and confident.',
     price: 89,
     savingsLabel: 'Save 15%',
     includedProducts: ['intimate-whitening-cream']

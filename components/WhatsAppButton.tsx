@@ -1,7 +1,7 @@
 'use client';
 
 const WHATSAPP_URL =
-  'https://wa.me/923032379096?text=Hi%20I%20would%20like%20a%20private%20consultation%20about%20EILIYAH%20products';
+  'https://wa.me/923126849901?text=Hi%20I%20would%20like%20a%20private%20consultation%20about%20EILIYAH%20products';
 
 export function WhatsAppButton() {
   return (

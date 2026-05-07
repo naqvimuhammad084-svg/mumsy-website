@@ -38,7 +38,7 @@ export default async function ProductDetailPage({ params }: Props) {
       <ProductGallery images={galleryImages} alt={product.name} />
 
       <div>
-        <p className="text-xs uppercase tracking-[0.2em] text-mumsy-purple/80">INTIMATE CARE</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-mumsy-purple/80">PERSONAL CARE BRAND</p>
         <h1 className="mt-2 font-heading text-3xl text-mumsy-dark">{product.name}</h1>
         <p className="mt-3 text-sm text-mumsy-dark/80">{product.description ?? ''}</p>
         <p className="mt-4 text-2xl font-semibold text-mumsy-purple">Rs {product.price.toFixed(0)}</p>
@@ -87,7 +87,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
         <div className="mt-6">
           <a
-            href="https://wa.me/923032379096?text=Hi%20I%20would%20like%20a%20private%20consultation%20about%20EILIYAH%20products"
+            href="https://wa.me/923126849901?text=Hi%20I%20would%20like%20a%20private%20consultation%20about%20EILIYAH%20products"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-full bg-[#25D366] text-white px-5 py-2.5 text-sm font-medium hover:bg-[#20BD5A] transition"

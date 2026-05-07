@@ -57,7 +57,7 @@ export const products: Product[] = [
       {
         question: 'Can I use this during pregnancy or postpartum?',
         answer:
-          'Many customers use gentle intimate-care products postpartum. However, if you are pregnant, breastfeeding, or under medical care, please check with your healthcare provider first.'
+          'Many customers use gentle personal-care products postpartum. However, if you are pregnant, breastfeeding, or under medical care, please check with your healthcare provider first.'
       }
     ]
   }

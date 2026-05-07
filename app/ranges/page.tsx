@@ -6,6 +6,8 @@ export const metadata = {
   title: 'Ranges • EILIYAH Intimate Care'
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function RangesPage() {
   const list = await getRanges();
 

@@ -1,14 +1,6 @@
 import { supabase } from '@/lib/supabase';
 import type { Range, Product, Bundle } from '@/lib/types';
 
-const DEFAULT_VINTIMA: Range = {
-  id: 'vintima-default',
-  name: 'VINTIMA',
-  slug: 'vintima',
-  logo_url: '/vintima-logo.png',
-  description: 'Premium intimate care range.'
-};
-
 export async function getRanges(): Promise<Range[]> {
   try {
     const { data: ranges, error } = await supabase
@@ -17,9 +9,9 @@ export async function getRanges(): Promise<Range[]> {
       .order('created_at', { ascending: true });
     if (error) throw error;
     const list = (ranges ?? []) as Range[];
-    return list.length > 0 ? list : [DEFAULT_VINTIMA];
+    return list;
   } catch {
-    return [DEFAULT_VINTIMA];
+    return [];
   }
 }
 
@@ -234,15 +226,38 @@ export async function getAllBundlesWithProducts(): Promise<BundleWithProducts[]>
 }
 
 export async function getOrders(): Promise<
-  { id: string; customer_name: string; phone: string; address: string; order_items: unknown; total_price: number; payment_method: string; created_at: string }[]
+  {
+    id: string;
+    customer_name: string;
+    phone: string;
+    address: string;
+    order_items: unknown;
+    total_price: number;
+    payment_method: string;
+    status: string;
+    created_at: string;
+  }[]
 > {
   try {
     const { data, error } = await supabase
       .from('orders')
-      .select('id, customer_name, phone, address, order_items, total_price, payment_method, created_at')
+      .select('*')
       .order('created_at', { ascending: false });
     if (error) throw error;
-    return (data ?? []) as typeof data;
+    return (data ?? []).map((row) => {
+      const r = row as Record<string, unknown>;
+      return {
+        id: String(r.id ?? ''),
+        customer_name: String(r.customer_name ?? ''),
+        phone: String(r.phone ?? r.customer_phone ?? ''),
+        address: String(r.address ?? ''),
+        order_items: r.order_items ?? r.items ?? [],
+        total_price: Number(r.total_price ?? r.total_amount ?? 0),
+        payment_method: String(r.payment_method ?? ''),
+        status: String(r.status ?? 'pending'),
+        created_at: String(r.created_at ?? ''),
+      };
+    });
   } catch {
     return [];
   }
@@ -259,19 +274,41 @@ export async function createOrder(order: {
   payment_method: string;
 }): Promise<{ id?: string; error?: string }> {
   try {
+    const addressText = [order.address, order.city].filter(Boolean).join(', ');
+    const canonicalPayload = {
+      customer_name: order.customer_name,
+      phone: order.phone,
+      address: addressText,
+      order_items: order.order_items,
+      total_price: order.total_price,
+      payment_method: order.payment_method,
+      status: 'pending',
+    };
+    const altPayload = {
+      customer_name: order.customer_name,
+      customer_phone: order.phone,
+      address: addressText,
+      items: order.order_items,
+      total_amount: order.total_price,
+      payment_method: order.payment_method,
+      status: 'pending',
+    };
+
     const { data, error } = await supabase
       .from('orders')
-      .insert({
-        customer_name: order.customer_name,
-        phone: order.phone,
-        address: [order.address, order.city].filter(Boolean).join(', '),
-        order_items: order.order_items,
-        total_price: order.total_price,
-        payment_method: order.payment_method,
-      })
+      .insert(canonicalPayload)
       .select('id')
       .single();
-    if (error) return { error: error.message };
+    if (error) {
+      // Fallback for alternate production schemas using customer_phone/items/total_amount
+      const { data: altData, error: altError } = await supabase
+        .from('orders')
+        .insert(altPayload)
+        .select('id')
+        .single();
+      if (altError) return { error: altError.message };
+      return { id: altData?.id as string | undefined };
+    }
     return { id: data?.id };
   } catch (e) {
     return { error: String(e) };
@@ -361,4 +398,58 @@ export async function setBundleProducts(bundle_id: string, items: { product_id: 
 export async function getBundleProductIds(bundle_id: string): Promise<{ product_id: string; quantity: number }[]> {
   const { data } = await supabase.from('bundle_products').select('product_id, quantity').eq('bundle_id', bundle_id);
   return (data ?? []) as { product_id: string; quantity: number }[];
+}
+
+export type HeroSlide = {
+  id: string;
+  text: string | null;
+  image_url?: string | null;
+  sort_order: number;
+  created_at?: string | null;
+};
+
+export async function getHeroSlides(): Promise<HeroSlide[]> {
+  try {
+    const { data, error } = await supabase
+      .from('hero_slides')
+      .select('id, text, image_url, sort_order, created_at')
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true });
+    if (error) throw error;
+    return (data ?? []).map((row) => {
+      const r = row as Record<string, unknown>;
+      return {
+        id: String(r.id ?? ''),
+        text: typeof r.text === 'string' ? r.text : null,
+        image_url: typeof r.image_url === 'string' ? r.image_url : null,
+        sort_order: Number(r.sort_order ?? 0),
+        created_at: typeof r.created_at === 'string' ? r.created_at : null,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+export async function createHeroSlide(row: { text?: string | null; image_url?: string | null; sort_order?: number }): Promise<{ id?: string; error?: string }> {
+  try {
+    const { data, error } = await supabase
+      .from('hero_slides')
+      .insert({
+        text: row.text?.trim() || null,
+        image_url: row.image_url?.trim() || null,
+        sort_order: row.sort_order ?? 0
+      })
+      .select('id')
+      .single();
+    if (error) return { error: error.message };
+    return { id: data?.id };
+  } catch (e) {
+    return { error: String(e) };
+  }
+}
+
+export async function deleteHeroSlide(id: string): Promise<{ error?: string }> {
+  const { error } = await supabase.from('hero_slides').delete().eq('id', id);
+  return error ? { error: error.message } : {};
 }

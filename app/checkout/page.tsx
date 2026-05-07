@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { createOrder } from '@/lib/data';
 
-type PaymentMethod = 'cod' | 'debit_card' | 'credit_card' | 'whatsapp';
+type PaymentMethod = 'cod' | 'card' | 'payfast' | 'whatsapp';
 
 export default function CheckoutPage() {
   const { items, total, clear } = useCart();
@@ -32,15 +32,37 @@ export default function CheckoutPage() {
     setLoading(true);
 
     if (payment === 'whatsapp') {
+      const result = await createOrder({
+        customer_name: form.fullName,
+        phone: form.phone,
+        address: form.address,
+        city: form.city,
+        order_notes: form.orderNotes || null,
+        order_items: items.map((i) => ({
+          id: i.id,
+          name: i.name,
+          price: i.price,
+          quantity: i.quantity
+        })),
+        total_price: total,
+        payment_method: 'WhatsApp'
+      });
+      if (result.error) {
+        setLoading(false);
+        setError(result.error);
+        return;
+      }
       const summary = items
         .map((i) => `${i.name} x${i.quantity} - Rs ${(i.price * i.quantity).toFixed(0)}`)
         .join('\n');
       const message = `Hi, I would like to place an order for EILIYAH products.\n\nName: ${form.fullName}\nPhone: ${form.phone}\nAddress: ${form.address}, ${form.city}\n\nItems:\n${summary}\nTotal: Rs ${total.toFixed(0)}`;
       window.open(
-        `https://wa.me/923032379096?text=${encodeURIComponent(message)}`,
+        `https://wa.me/923126849901?text=${encodeURIComponent(message)}`,
         '_blank'
       );
       setLoading(false);
+      setSuccess(true);
+      clear();
       return;
     }
 
@@ -57,7 +79,7 @@ export default function CheckoutPage() {
         quantity: i.quantity
       })),
       total_price: total,
-      payment_method: payment === 'cod' ? 'Cash on Delivery' : payment === 'debit_card' ? 'Debit Card' : 'Credit Card'
+      payment_method: payment === 'cod' ? 'COD' : payment === 'card' ? 'Card' : 'PayFast'
     });
 
     setLoading(false);
@@ -167,9 +189,9 @@ export default function CheckoutPage() {
           <div className="mt-3 space-y-2">
             {[
               { id: 'cod' as const, label: 'Cash on Delivery (COD)' },
-              { id: 'debit_card' as const, label: 'Debit Card' },
-              { id: 'credit_card' as const, label: 'Credit Card' },
-              { id: 'whatsapp' as const, label: 'WhatsApp Order' }
+              { id: 'card' as const, label: 'Card' },
+              { id: 'payfast' as const, label: 'PayFast' },
+              { id: 'whatsapp' as const, label: 'WhatsApp' }
             ].map((opt) => (
               <label
                 key={opt.id}
@@ -191,7 +213,7 @@ export default function CheckoutPage() {
             ))}
           </div>
 
-          {(payment === 'credit_card' || payment === 'debit_card') && (
+          {(payment === 'card' || payment === 'payfast') && (
             <div className="mt-4 p-4 rounded-xl bg-mumsy-soft/60 border border-mumsy-lavender/40 text-sm text-mumsy-dark">
               <p className="font-semibold text-mumsy-dark">Pay online (Pakistan)</p>
               <p className="mt-1 text-mumsy-dark/80">
@@ -201,7 +223,7 @@ export default function CheckoutPage() {
                 <li><strong>JazzCash</strong> – send payment to our JazzCash number</li>
                 <li><strong>EasyPaisa</strong> – send payment to our EasyPaisa number</li>
                 <li><strong>Bank transfer</strong> – we will share our bank account details</li>
-                <li><strong>Card payment</strong> – we may send a secure payment link for debit/credit card</li>
+                <li><strong>PayFast/Card</strong> – we may send a secure payment link for PayFast/card</li>
               </ul>
               <p className="mt-2 text-mumsy-dark/70">
                 Select your preferred method when we call or WhatsApp you. Your order will be confirmed once payment is received.

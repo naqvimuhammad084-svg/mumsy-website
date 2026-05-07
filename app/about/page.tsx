@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'About • EILIYAH Intimate Care'
+  title: 'About • EILIYAH Personal Care Brand'
 };
 
 export default function AboutPage() {
@@ -9,11 +9,11 @@ export default function AboutPage() {
         ABOUT EILIYAH
       </p>
       <h1 className="mt-2 font-heading text-3xl text-mumsy-dark">
-        A softer, safer way to talk about intimate care.
+        A softer, safer way to talk about personal care.
       </h1>
       <p className="mt-4 text-sm text-mumsy-dark/80">
         EILIYAH was created to give women a more respectful, gentle option for
-        intimate-care routines. Instead of loud promises or harsh ingredients,
+        personal-care routines. Instead of loud promises or harsh ingredients,
         we focus on comfort, hydration, and a more even-looking tone that
         supports the way you already care for your body.
       </p>

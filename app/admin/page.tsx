@@ -5,6 +5,7 @@ const sections = [
   { href: '/admin/products', label: 'Products management', desc: 'Add, edit, delete products' },
   { href: '/admin/bundles', label: 'Bundles management', desc: 'Create and edit bundles' },
   { href: '/admin/orders', label: 'Orders', desc: 'View customer orders' },
+  { href: '/admin/slides', label: 'Hero slides', desc: 'Manage homepage slideshow text' },
 ];
 
 export default function AdminDashboardPage() {

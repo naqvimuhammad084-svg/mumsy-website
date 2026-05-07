@@ -7,7 +7,7 @@ const faqs = [
   {
     question: 'Can I use MUMSY products postpartum or during breastfeeding?',
     answer:
-      'Many women choose gentle intimate-care routines during postpartum. Because every recovery and medical history is different, please speak with your healthcare provider before introducing any new product.'
+      'Many women choose gentle personal-care routines during postpartum. Because every recovery and medical history is different, please speak with your healthcare provider before introducing any new product.'
   },
   {
     question: 'Do you offer discreet packaging?',
@@ -27,7 +27,7 @@ const faqs = [
 ];
 
 export const metadata = {
-  title: 'FAQ • EILIYAH Intimate Care'
+  title: 'FAQ • EILIYAH Personal Care Brand'
 };
 
 export default function FaqPage() {

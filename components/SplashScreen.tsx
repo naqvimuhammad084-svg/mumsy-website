@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import splashImage from '@/iml.jpeg';
 
 const SPLASH_KEY = 'eiliyah-splash-seen';
 const DURATION_MS = 3000;
@@ -37,7 +38,7 @@ export function SplashScreen() {
           <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-[2.5rem] bg-white/10 border border-white/15 shadow-soft overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.18),_transparent_60%)]" />
             <Image
-              src="/eiliyah-logo.png"
+              src={splashImage}
               alt="EILIYAH"
               fill
               className="object-cover"
@@ -49,7 +50,7 @@ export function SplashScreen() {
           EILIYAH
         </p>
         <p className="mt-2 text-xs md:text-sm text-white/75 tracking-[0.3em] uppercase">
-          Intimate care
+          Personal care brand
         </p>
       </div>
     </div>

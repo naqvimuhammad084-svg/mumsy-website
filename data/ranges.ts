@@ -12,6 +12,6 @@ export const defaultRanges: StaticRange[] = [
     name: 'VINTIMA',
     slug: 'vintima',
     logo_url: '/vintima-logo.png',
-    description: 'Premium intimate care range.'
+    description: 'Premium personal care range.'
   }
 ];

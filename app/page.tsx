@@ -5,6 +5,7 @@ import { ProductCard } from '@/components/ProductCard';
 import { BundleCard } from '@/components/BundleCard';
 import { TestimonialSection } from '@/components/TestimonialSection';
 import { EducationSection } from '@/components/EducationSection';
+import { HomeTopAnnouncements } from '@/components/HomeTopAnnouncements';
 import { products as staticProducts } from '@/data/products';
 import { bundles as staticBundles } from '@/data/bundles';
 import { getRanges } from '@/lib/data';
@@ -12,9 +13,11 @@ import type { ProductCardData } from '@/components/ProductCard';
 import type { BundleCardData } from '@/components/BundleCard';
 
 export const metadata = {
-  title: 'EILIYAH Intimate Care',
-  description: 'Gentle, dermatologist-inspired intimate-care essentials.'
+  title: 'EILIYAH Personal Care Brand',
+  description: 'Gentle, dermatologist-inspired personal-care essentials.'
 };
+
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   // Load all ranges from Supabase via existing data helper.
@@ -36,6 +39,7 @@ export default async function HomePage() {
 
   return (
     <main>
+      <HomeTopAnnouncements />
       <Hero />
 
       {/* Our Ranges - always show at least VINTIMA */}

@@ -23,7 +23,7 @@ export function EducationSection() {
       <div className="container-page grid md:grid-cols-[1.1fr,1fr] gap-8 items-start">
       <div>
         <p className="text-xs uppercase tracking-[0.2em] text-mumsy-purple/80">
-          INTIMATE CARE EDUCATION
+          PERSONAL CARE EDUCATION
         </p>
         <h2 className="mt-2 font-heading text-2xl sm:text-3xl text-mumsy-dark">
           A kinder, more honest way to talk about intimate brightening.

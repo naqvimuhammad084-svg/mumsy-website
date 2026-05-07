@@ -4,9 +4,9 @@ import { ReactNode } from 'react';
 import { StoreShell } from '@/components/StoreShell';
 
 export const metadata: Metadata = {
-  title: 'EILIYAH Intimate Care',
+  title: 'EILIYAH Personal Care Brand',
   description:
-    'Premium, gentle intimate-care essentials designed to support your confidence every day.'
+    'Premium, gentle personal-care essentials designed to support your confidence every day.'
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

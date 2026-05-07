@@ -108,7 +108,7 @@ export default function CartPage() {
 }
 
 function WhatsAppCheckoutButton() {
-  const url = 'https://wa.me/923032379096?text=Hi%20I%20would%20like%20to%20place%20an%20order%20for%20EILIYAH%20products';
+  const url = 'https://wa.me/923126849901?text=Hi%20I%20would%20like%20to%20place%20an%20order%20for%20EILIYAH%20products';
   return (
     <a
       href={url}
@@ -116,7 +116,7 @@ function WhatsAppCheckoutButton() {
       rel="noopener noreferrer"
       className="inline-flex items-center justify-center rounded-full border border-mumsy-purple/40 text-mumsy-purple px-6 py-2 text-sm font-semibold hover:bg-mumsy-soft transition"
     >
-      WhatsApp Order
+      Checkout via WhatsApp
     </a>
   );
 }

@@ -22,19 +22,6 @@ export default async function RangePage({ params }: Props) {
     : null;
 
   if (!safeRange) {
-    if (rawSlug.toLowerCase() === 'vintima') {
-      return (
-        <RangeLayout
-          range={{
-            name: 'VINTIMA',
-            logo_url: '/vintima-logo.png',
-            description: 'Premium intimate care range.'
-          }}
-          products={[]}
-          bundlesWithProducts={[]}
-        />
-      );
-    }
     return notFound();
   }
 
@@ -109,7 +96,7 @@ function RangeLayout({
         <section className="container-page py-10">
           <h2 className="font-heading text-2xl text-mumsy-dark">Products</h2>
           <p className="mt-1 text-sm text-mumsy-dark/70">
-            Gentle formulas designed for your intimate care routine.
+            Gentle formulas designed for your personal care routine.
           </p>
           <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
