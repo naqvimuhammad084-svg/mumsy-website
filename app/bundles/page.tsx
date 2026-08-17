@@ -1,5 +1,6 @@
 import { BundleCard } from '@/components/BundleCard';
 import { getAllBundlesWithProducts, getAllBundles } from '@/lib/data';
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Bundles • EILIYAH Intimate Care'

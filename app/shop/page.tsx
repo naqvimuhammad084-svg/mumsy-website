@@ -1,6 +1,7 @@
 import { ProductCard } from '@/components/ProductCard';
 import { getAllProducts } from '@/lib/data';
 import { products as staticProducts } from '@/data/products';
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Shop • EILIYAH Intimate Care'
