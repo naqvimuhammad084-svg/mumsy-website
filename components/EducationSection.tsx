@@ -1,7 +1,7 @@
 const tips = [
   {
     title: 'Designed for the outer intimate area only',
-    body: 'MUMSY products are created for the vulva (outer skin) and bikini line. They are not meant for internal use.'
+    body: 'EILIYAH products are created for the vulva (outer skin) and bikini line. They are not meant for internal use.'
   },
   {
     title: 'Gentle, consistent care works best',
@@ -30,7 +30,7 @@ export function EducationSection() {
         </h2>
         <p className="mt-3 text-sm text-mumsy-dark/80 max-w-xl">
           Intimate skin naturally changes over time—through hormones, shaving,
-          pregnancy, and everyday life. MUMSY focuses on comfort, hydration, and
+          pregnancy, and everyday life. EILIYAH focuses on comfort, hydration, and
           a more even-looking tone without promising instant transformations or
           medical outcomes.
         </p>
