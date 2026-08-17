@@ -3,10 +3,6 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 
-// Debug logs to check if env variables are loading
-console.log("SUPABASE URL:", supabaseUrl)
-console.log("SUPABASE KEY:", supabaseAnonKey ? "Loaded" : "Missing")
-
 function createSupabaseClient(): SupabaseClient {
   if (typeof window !== 'undefined' && (!supabaseUrl || !supabaseAnonKey)) {
     console.error(
@@ -14,8 +10,13 @@ function createSupabaseClient(): SupabaseClient {
     )
   }
 
-  // Use Supabase defaults so sessions persist correctly across navigations/reloads.
-  return createClient(supabaseUrl, supabaseAnonKey)
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    global: {
+      // Next.js caches fetch() by default; Supabase reads must always be fresh in production.
+      fetch: (url, options = {}) =>
+        fetch(url, { ...options, cache: 'no-store' }),
+    },
+  })
 }
 
 export const supabase = createSupabaseClient()

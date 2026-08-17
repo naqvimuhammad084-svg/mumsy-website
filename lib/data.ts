@@ -162,67 +162,56 @@ export async function getBundleById(id: string): Promise<Bundle | null> {
 }
 
 export async function getAllProducts(): Promise<Product[]> {
-  try {
-    const { data: products, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: true });
-    if (error) throw error;
+  const { data: products, error } = await supabase
+    .from('products')
+    .select('*')
+    .order('created_at', { ascending: true });
+  if (error) throw new Error(`Failed to load products: ${error.message}`);
 
-    const withImages: Product[] = await Promise.all(
-      (products ?? []).map(async (p) => {
-        const { data: imgs } = await supabase
-          .from('product_images')
-          .select('url, sort_order')
-          .eq('product_id', p.id)
-          .order('sort_order');
-        return {
-          ...p,
-          images: (imgs ?? []).map((i) => ({ url: i.url, sort_order: i.sort_order ?? 0 })),
-        } as Product;
-      })
-    );
-    return withImages;
-  } catch {
-    return [];
-  }
+  const withImages: Product[] = await Promise.all(
+    (products ?? []).map(async (p) => {
+      const { data: imgs, error: imgError } = await supabase
+        .from('product_images')
+        .select('url, sort_order')
+        .eq('product_id', p.id)
+        .order('sort_order');
+      if (imgError) throw new Error(`Failed to load product images: ${imgError.message}`);
+      return {
+        ...p,
+        images: (imgs ?? []).map((i) => ({ url: i.url, sort_order: i.sort_order ?? 0 })),
+      } as Product;
+    })
+  );
+  return withImages;
 }
 
 export async function getAllBundles(): Promise<Bundle[]> {
-  try {
-    const { data, error } = await supabase
-      .from('bundles')
-      .select('*')
-      .order('created_at', { ascending: true });
-    if (error) throw error;
-    return (data ?? []) as Bundle[];
-  } catch {
-    return [];
-  }
+  const { data, error } = await supabase
+    .from('bundles')
+    .select('*')
+    .order('created_at', { ascending: true });
+  if (error) throw new Error(`Failed to load bundles: ${error.message}`);
+  return (data ?? []) as Bundle[];
 }
 
 export async function getAllBundlesWithProducts(): Promise<BundleWithProducts[]> {
-  try {
-    const bundles = await getAllBundles();
-    const withProducts: BundleWithProducts[] = await Promise.all(
-      bundles.map(async (b) => {
-        const rows = await getBundleProductIds(b.id);
-        const includedProducts = await Promise.all(
-          rows.map(async ({ product_id, quantity }) => {
-            const product = await getProductById(product_id);
-            return product ? { product, quantity } : null;
-          })
-        );
-        return {
-          ...b,
-          includedProducts: includedProducts.filter((x): x is { product: Product; quantity: number } => x != null),
-        };
-      })
-    );
-    return withProducts;
-  } catch {
-    return [];
-  }
+  const bundles = await getAllBundles();
+  const withProducts: BundleWithProducts[] = await Promise.all(
+    bundles.map(async (b) => {
+      const rows = await getBundleProductIds(b.id);
+      const includedProducts = await Promise.all(
+        rows.map(async ({ product_id, quantity }) => {
+          const product = await getProductById(product_id);
+          return product ? { product, quantity } : null;
+        })
+      );
+      return {
+        ...b,
+        includedProducts: includedProducts.filter((x): x is { product: Product; quantity: number } => x != null),
+      };
+    })
+  );
+  return withProducts;
 }
 
 export async function getOrders(): Promise<
