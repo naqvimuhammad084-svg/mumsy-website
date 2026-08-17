@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getBundleWithProducts, getBundleById } from '@/lib/data';
 import { AddBundleToCartButton } from '@/components/cart/AddBundleToCartButton';
+import { ProductPrice } from '@/components/ProductPrice';
 import { bundles as staticBundles } from '@/data/bundles';
 import { products as staticProducts } from '@/data/products';
 
@@ -76,9 +77,10 @@ export default async function BundleDetailPage({ params }: Props) {
                   {product.description && (
                     <p className="mt-0.5 text-sm text-mumsy-dark/70 line-clamp-2">{product.description}</p>
                   )}
-                  <p className="mt-2 text-sm text-mumsy-purple">
-                    ×{quantity} · Rs {product.price.toFixed(0)} each
-                  </p>
+                  <div className="mt-2">
+                    <ProductPrice price={product.price} salePrice={product.sale_price} size="sm" />
+                    <p className="text-xs text-mumsy-dark/60 mt-0.5">×{quantity}</p>
+                  </div>
                 </div>
               </Link>
             ))}

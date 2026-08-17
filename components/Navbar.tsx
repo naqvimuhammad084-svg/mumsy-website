@@ -39,7 +39,7 @@ export function Navbar() {
         <Link href="/" className="flex items-center gap-2 shrink-0">
           <div className="relative h-9 w-9 rounded-2xl bg-mumsy-purple/95 overflow-hidden shadow-[0_10px_30px_rgba(91,44,131,0.35)]">
             <Image
-              src="/eiliyah-logo.png"
+              src="/1.png"
               alt="EILIYAH"
               fill
               className="object-cover"

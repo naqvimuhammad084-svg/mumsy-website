@@ -41,6 +41,7 @@ export default async function BundlesPage() {
       id: product.id,
       name: product.name,
       price: product.price,
+      sale_price: product.sale_price,
       description: product.description,
       imageUrl: product.images?.[0]?.url?.trim() || null,
       quantity,

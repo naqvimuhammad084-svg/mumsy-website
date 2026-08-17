@@ -5,7 +5,8 @@ import { getProductById as getDbProduct } from '@/lib/data';
 import { getProductById as getStaticProduct } from '@/data/products';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
 import { ProductGallery } from '@/components/ProductGallery';
-import type { Product } from '@/lib/types'; // ✅ import Product type
+import { ProductPrice } from '@/components/ProductPrice';
+import type { Product } from '@/lib/types';
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -41,9 +42,21 @@ export default async function ProductDetailPage({ params }: Props) {
         <p className="text-xs uppercase tracking-[0.2em] text-mumsy-purple/80">PERSONAL CARE BRAND</p>
         <h1 className="mt-2 font-heading text-3xl text-mumsy-dark">{product.name}</h1>
         <p className="mt-3 text-sm text-mumsy-dark/80">{product.description ?? ''}</p>
-        <p className="mt-4 text-2xl font-semibold text-mumsy-purple">Rs {product.price.toFixed(0)}</p>
+        <ProductPrice
+          price={product.price}
+          salePrice={isDb ? typedProduct.sale_price : undefined}
+          size="lg"
+          className="mt-4"
+        />
         <div className="mt-4">
-          <AddToCartButton product={{ id: product.id, name: product.name, price: product.price }} />
+          <AddToCartButton
+            product={{
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              sale_price: isDb ? typedProduct.sale_price : undefined,
+            }}
+          />
         </div>
 
         <div className="mt-8 space-y-6">

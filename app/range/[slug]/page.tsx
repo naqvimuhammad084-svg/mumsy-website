@@ -64,8 +64,8 @@ function RangeLayout({
   bundlesWithProducts
 }: {
   range: { name: string; logo_url: string | null; description: string | null };
-  products: { id: string; name: string; price: number; description?: string | null; images: { url: string }[] }[];
-  bundlesWithProducts: { id: string; name: string; price: number; description?: string | null; savings_label?: string | null; includedProducts: { product: { id: string; name: string; price: number; description?: string | null; images: { url: string }[] }; quantity: number }[] }[];
+  products: { id: string; name: string; price: number; sale_price?: number | null; description?: string | null; images: { url: string }[] }[];
+  bundlesWithProducts: { id: string; name: string; price: number; description?: string | null; savings_label?: string | null; includedProducts: { product: { id: string; name: string; price: number; sale_price?: number | null; description?: string | null; images: { url: string }[] }; quantity: number }[] }[];
 }) {
   const logoUrl = (range.logo_url && range.logo_url.trim()) ? range.logo_url : '/vintima-logo.png';
 
@@ -106,6 +106,7 @@ function RangeLayout({
                   id: product.id,
                   name: product.name,
                   price: product.price,
+                  sale_price: product.sale_price,
                   description: product.description ?? undefined,
                   images: product.images
                 }}
@@ -135,8 +136,9 @@ function RangeLayout({
                     id: product.id,
                     name: product.name,
                     price: product.price,
+                    sale_price: product.sale_price,
                     description: product.description,
-                    images: product.images, // ✅ now safe
+                    imageUrl: product.images?.[0]?.url?.trim() || null,
                     quantity,
                   })),
                 }}

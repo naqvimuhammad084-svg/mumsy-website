@@ -5,7 +5,7 @@ const faqs = [
       'Our products are created with gentle ingredients and are designed for the external intimate area only. However, every body is unique, so we always recommend a small patch test first.'
   },
   {
-    question: 'Can I use MUMSY products postpartum or during breastfeeding?',
+    question: 'Can I use EILIYAH products postpartum or during breastfeeding?',
     answer:
       'Many women choose gentle personal-care routines during postpartum. Because every recovery and medical history is different, please speak with your healthcare provider before introducing any new product.'
   },

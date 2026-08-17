@@ -6,9 +6,8 @@ import { BundleCard } from '@/components/BundleCard';
 import { TestimonialSection } from '@/components/TestimonialSection';
 import { EducationSection } from '@/components/EducationSection';
 import { HomeTopAnnouncements } from '@/components/HomeTopAnnouncements';
-import { products as staticProducts } from '@/data/products';
 import { bundles as staticBundles } from '@/data/bundles';
-import { getRanges } from '@/lib/data';
+import { getRanges, getAllProducts } from '@/lib/data';
 import type { ProductCardData } from '@/components/ProductCard';
 import type { BundleCardData } from '@/components/BundleCard';
 
@@ -20,14 +19,14 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  // Load all ranges from Supabase via existing data helper.
-  const ranges = await getRanges();
-  const featuredProducts: ProductCardData[] = staticProducts.slice(0, 4).map((p) => ({
+  const [ranges, dbProducts] = await Promise.all([getRanges(), getAllProducts().catch(() => [])]);
+  const featuredProducts: ProductCardData[] = dbProducts.slice(0, 4).map((p) => ({
     id: p.id,
     name: p.name,
     price: p.price,
-    image: p.image,
-    shortBenefit: p.shortBenefit
+    sale_price: p.sale_price,
+    images: p.images,
+    description: p.description ?? undefined,
   }));
   const featuredBundles: BundleCardData[] = staticBundles.slice(0, 3).map((b) => ({
     id: b.id,

@@ -25,6 +25,7 @@ export default function AdminProductsPage() {
     name: '',
     description: '',
     price: '',
+    sale_price: '',
     benefits: '',
     ingredients: '',
     how_to_use: '',
@@ -62,6 +63,21 @@ export default function AdminProductsPage() {
         return;
       }
 
+      let sale_price: number | null = null;
+      if (form.sale_price.trim()) {
+        sale_price = parseFloat(form.sale_price);
+        if (isNaN(sale_price) || sale_price < 0) {
+          setError('Invalid sale price');
+          setSaving(false);
+          return;
+        }
+        if (sale_price >= price) {
+          setError('Sale price must be lower than the regular price');
+          setSaving(false);
+          return;
+        }
+      }
+
       const benefits = form.benefits.trim()
         ? form.benefits.trim().split('\n').map((s) => s.trim()).filter(Boolean)
         : null;
@@ -78,6 +94,7 @@ export default function AdminProductsPage() {
           name: form.name,
           description: form.description || null,
           price,
+          sale_price,
           benefits,
           ingredients,
           how_to_use,
@@ -89,7 +106,7 @@ export default function AdminProductsPage() {
             if (up.url) await addProductImage(editingId, up.url, 0);
           }
           setEditingId(null);
-          setForm({ range_id: ranges[0]?.id ?? '', name: '', description: '', price: '', benefits: '', ingredients: '', how_to_use: '', images: [] });
+          setForm({ range_id: ranges[0]?.id ?? '', name: '', description: '', price: '', sale_price: '', benefits: '', ingredients: '', how_to_use: '', images: [] });
           load();
         }
       } else {
@@ -98,6 +115,7 @@ export default function AdminProductsPage() {
           name: form.name,
           description: form.description || null,
           price,
+          sale_price,
           benefits,
           ingredients,
           how_to_use,
@@ -112,7 +130,7 @@ export default function AdminProductsPage() {
             const up = await upRes.json().catch(() => ({}));
             if (up.url) await addProductImage(res.id, up.url, order++);
           }
-          setForm({ range_id: ranges[0]?.id ?? '', name: '', description: '', price: '', benefits: '', ingredients: '', how_to_use: '', images: [] });
+          setForm({ range_id: ranges[0]?.id ?? '', name: '', description: '', price: '', sale_price: '', benefits: '', ingredients: '', how_to_use: '', images: [] });
           load();
         }
       }
@@ -137,6 +155,7 @@ export default function AdminProductsPage() {
       name: p.name,
       description: p.description || '',
       price: String(p.price),
+      sale_price: p.sale_price != null ? String(p.sale_price) : '',
       benefits: Array.isArray(p.benefits) ? p.benefits.join('\n') : '',
       ingredients: Array.isArray(p.ingredients) ? p.ingredients.join('\n') : '',
       how_to_use: Array.isArray(p.how_to_use) ? p.how_to_use.join('\n') : '',
@@ -180,6 +199,10 @@ export default function AdminProductsPage() {
         <label className="block">
           <span className="text-sm text-mumsy-dark/80">Price (Rs)</span>
           <input type="number" required min="0" step="0.01" value={form.price} onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))} className="mt-1 w-full rounded-xl border border-mumsy-lavender/50 px-3 py-2 text-sm" />
+        </label>
+        <label className="block">
+          <span className="text-sm text-mumsy-dark/80">Sale price (Rs, optional)</span>
+          <input type="number" min="0" step="0.01" value={form.sale_price} onChange={(e) => setForm((f) => ({ ...f, sale_price: e.target.value }))} placeholder="Leave empty for no discount" className="mt-1 w-full rounded-xl border border-mumsy-lavender/50 px-3 py-2 text-sm" />
         </label>
         <label className="block">
           <span className="text-sm text-mumsy-dark/80">Benefits (one per line)</span>
@@ -230,7 +253,16 @@ export default function AdminProductsPage() {
                     </td>
                     <td className="p-3 font-medium">{p.name}</td>
                     <td className="p-3 text-mumsy-dark/70">{getRangeName(p.range_id)}</td>
-                    <td className="p-3">Rs {p.price}</td>
+                    <td className="p-3">
+                      {p.sale_price != null && p.sale_price > 0 && p.sale_price < p.price ? (
+                        <span>
+                          <span className="text-mumsy-purple font-medium">Rs {p.sale_price}</span>
+                          <span className="text-mumsy-dark/50 line-through ml-2 text-xs">Rs {p.price}</span>
+                        </span>
+                      ) : (
+                        <>Rs {p.price}</>
+                      )}
+                    </td>
                     <td className="p-3">
                       <button type="button" onClick={() => startEdit(p)} className="text-mumsy-purple font-medium mr-2">Edit</button>
                       <button type="button" onClick={() => handleDelete(p.id, p.name)} className="text-red-600 font-medium">Delete</button>

@@ -15,6 +15,7 @@ export type ProductRow = {
   name: string;
   description: string | null;
   price: number;
+  sale_price?: number | null;
   benefits: string[] | null;
   ingredients: string[] | null;
   how_to_use: string[] | null;

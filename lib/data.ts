@@ -329,7 +329,7 @@ export async function deleteRange(id: string): Promise<{ error?: string }> {
 }
 
 // --- Products CRUD ---
-export async function createProduct(row: { range_id: string; name: string; description?: string | null; price: number; benefits?: string[] | null; ingredients?: string[] | null; how_to_use?: string[] | null }): Promise<{ id?: string; error?: string }> {
+export async function createProduct(row: { range_id: string; name: string; description?: string | null; price: number; sale_price?: number | null; benefits?: string[] | null; ingredients?: string[] | null; how_to_use?: string[] | null }): Promise<{ id?: string; error?: string }> {
   try {
     const { data, error } = await supabase.from('products').insert(row).select('id').single();
     if (error) return { error: error.message };
@@ -338,7 +338,7 @@ export async function createProduct(row: { range_id: string; name: string; descr
     return { error: String(e) };
   }
 }
-export async function updateProduct(id: string, row: Partial<{ range_id: string; name: string; description: string | null; price: number; benefits: string[] | null; ingredients: string[] | null; how_to_use: string[] | null }>): Promise<{ error?: string }> {
+export async function updateProduct(id: string, row: Partial<{ range_id: string; name: string; description: string | null; price: number; sale_price: number | null; benefits: string[] | null; ingredients: string[] | null; how_to_use: string[] | null }>): Promise<{ error?: string }> {
   const { error } = await supabase.from('products').update(row).eq('id', id);
   return error ? { error: error.message } : {};
 }

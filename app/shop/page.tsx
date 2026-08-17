@@ -55,6 +55,7 @@ export default async function ShopPage() {
                 id: product.id,
                 name: product.name,
                 price: product.price,
+                sale_price: product.sale_price,
                 description: product.description ?? undefined,
                 images: product.images
               }}

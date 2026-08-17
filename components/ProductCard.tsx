@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
+import { ProductPrice } from '@/components/ProductPrice';
 
 export type ProductCardData = {
   id: string;
   name: string;
   price: number;
+  sale_price?: number | null;
   image?: string;
   images?: { url: string }[];
   shortBenefit?: string;
@@ -49,9 +51,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
         {benefit && (
           <p className="mt-1 text-sm text-mumsy-dark/70">{benefit}</p>
         )}
-        <p className="mt-3 text-base font-semibold text-mumsy-purple">
-          Rs {product.price.toFixed(0)}
-        </p>
+        <ProductPrice price={product.price} salePrice={product.sale_price} className="mt-3" />
         <div className="mt-4 flex gap-2">
           <Link
             href={`/product/${product.id}`}

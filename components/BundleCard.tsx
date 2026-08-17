@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { AddBundleToCartButton } from '@/components/cart/AddBundleToCartButton';
+import { getEffectivePrice } from '@/lib/pricing';
 
 export type BundleProductDetail = {
   id: string;
   name: string;
   price: number;
+  sale_price?: number | null;
   description?: string | null;
   imageUrl?: string | null;
   quantity: number;
@@ -74,7 +76,7 @@ export function BundleCard({ bundle }: { bundle: BundleCardData }) {
                   <div className="p-2 text-center">
                     <p className="text-xs font-medium text-mumsy-dark line-clamp-2">{p.name}</p>
                     <p className="text-xs text-mumsy-purple mt-0.5">
-                      ×{p.quantity} · Rs {p.price.toFixed(0)}
+                      ×{p.quantity} · Rs {getEffectivePrice(p.price, p.sale_price).toFixed(0)} each
                     </p>
                   </div>
                 </Link>
